@@ -45,6 +45,8 @@ fn link_cuda() {
         println!("cargo:rustc-link-lib=static=cublas_static");
         #[cfg(feature = "cublas")]
         println!("cargo:rustc-link-lib=static=cublasLt_static");
+        #[cfg(feature = "cudart")]
+        println!("cargo:rustc-link-lib=static=cudart_static");
     }
     #[cfg(not(feature = "static-linking"))]
     {
@@ -52,6 +54,8 @@ fn link_cuda() {
         println!("cargo:rustc-link-lib=dylib=cublas");
         #[cfg(feature = "cublas")]
         println!("cargo:rustc-link-lib=dylib=cublasLt");
+        #[cfg(feature = "cudart")]
+        println!("cargo:rustc-link-lib=dylib=cudart");
     }
 
     #[cfg(feature = "cudnn")]

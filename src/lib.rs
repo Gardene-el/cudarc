@@ -89,4 +89,7 @@ pub mod nccl;
 #[cfg(feature = "nvrtc")]
 pub mod nvrtc;
 
+#[cfg(feature = "cudart")]
+pub mod cudart;
+
 pub mod types;
