@@ -89,4 +89,7 @@ pub mod nccl;
 #[cfg(feature = "nvrtc")]
 pub mod nvrtc;
 
+#[cfg(feature = "gl-interop-d")]
+pub mod gl_interop_d;
+
 pub mod types;

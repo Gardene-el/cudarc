@@ -5,6 +5,9 @@ fn main() {
 
     #[cfg(not(feature = "ci-check"))]
     link_cuda();
+
+    #[cfg(feature = "gl-interop-d")]
+    link_gl();
 }
 
 #[allow(unused)]
@@ -71,6 +74,28 @@ fn link_cuda() {
     }
     #[cfg(feature = "cudnn")]
     println!("cargo:rustc-link-lib=dylib=cudnn");
+}
+
+#[allow(unused)]
+fn link_gl() {
+    println!("cargo:rerun-if-env-changed=OPENGL_ROOT");
+
+    let candidates: Vec<PathBuf> = root_candidates().collect();
+
+    let opengl_root = root_candidates()
+        .find(|path| path.join("include").join("GL").join("gl.h").is_file())
+        .unwrap_or_else(|| {
+            panic!(
+                "Unable to find `include/GL/gl.h` under any of: {:?}. Set the `OPENGL_ROOT` environment variable to `$OPENGL_ROOT/include/GL/gl.h` to override path.",
+                candidates
+            )
+        });
+
+    for path in lib_candidates(&opengl_root) {
+        println!("cargo:rustc-link-search=native={}", path.display());
+    }
+
+    println!("cargo:rustc-link-lib=dylib=GL");
 }
 
 fn root_candidates() -> impl Iterator<Item = PathBuf> {
